@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <title>Poker – tabela punktów</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #0f172a;
       color: #e5e7eb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
+      margin: 0;
+      padding: 12px;
     }
 
     .container {
       background: #020617;
       padding: 24px;
       border-radius: 12px;
-      width: 100%;
       max-width: 700px;
+      margin: 0 auto;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
@@ -44,12 +44,11 @@
       background: #020617;
     }
 
-    input[type=number] {
-      width: 70px;
-      padding: 6px;
-      text-align: center;
-      border-radius: 6px;
-      border: none;
+    td:last-child {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
     }
 
     button {
@@ -80,8 +79,20 @@
       opacity: 0.8;
       text-align: center;
     }
+
+    @media (max-width: 600px) {
+      button {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>♠ Poker – punktacja ♣</h1>
@@ -94,9 +105,7 @@
           <th>Akcje</th>
         </tr>
       </thead>
-      <tbody id="players">
-        <!-- Players injected by JS -->
-      </tbody>
+      <tbody id="players"></tbody>
     </table>
 
     <button class="reset" onclick="resetScores()">🔄 Resetuj wszystkie punkty</button>
