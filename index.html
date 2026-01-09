@@ -1,201 +1,155 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8" />
-<title>Poker – tabela punktów</title>
-<style>
-body {
-font-family: Arial, sans-serif;
-background: #0f172a;
-color: #e5e7eb;
-display: flex;
-justify-content: center;
-align-items: center;
-min-height: 100vh;
-}
+  <meta charset="UTF-8" />
+  <title>Poker – tabela punktów</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
+    .container {
+      background: #020617;
+      padding: 24px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 700px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
 
-.container {
-background: #020617;
-padding: 24px;
-border-radius: 12px;
-width: 100%;
-max-width: 700px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
+    h1 {
+      text-align: center;
+      margin-bottom: 16px;
+    }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
 
-h1 {
-text-align: center;
-margin-bottom: 16px;
-}
+    th, td {
+      border-bottom: 1px solid #1e293b;
+      padding: 10px;
+      text-align: center;
+    }
 
+    th {
+      background: #020617;
+    }
 
-table {
-width: 100%;
-border-collapse: collapse;
-margin-bottom: 16px;
-}
+    input[type=number] {
+      width: 70px;
+      padding: 6px;
+      text-align: center;
+      border-radius: 6px;
+      border: none;
+    }
 
+    button {
+      background: #22c55e;
+      color: #022c22;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 2px;
+    }
 
-th, td {
-border-bottom: 1px solid #1e293b;
-padding: 10px;
-text-align: center;
-}
+    button.minus {
+      background: #ef4444;
+      color: #450a0a;
+    }
 
+    button.reset {
+      background: #38bdf8;
+      color: #082f49;
+      width: 100%;
+      margin-top: 8px;
+    }
 
-th {
-background: #020617;
-}
-
-
-input[type=number] {
-width: 70px;
-padding: 6px;
-text-align: center;
-border-radius: 6px;
-border: none;
-}
-
-
-button {
-background: #22c55e;
-color: #022c22;
-border: none;
-padding: 8px 12px;
-border-radius: 8px;
-cursor: pointer;
-font-weight: bold;
-margin: 2px;
-}
-
-
-button.minus {
-background: #ef4444;
-color: #450a0a;
-}
-
-
-button.reset {
-background: #38bdf8;
-color: #082f49;
-width: 100%;
-margin-top: 8px;
-}
-
-
-.note {
-font-size: 12px;
-opacity: 0.8;
-text-align: center;
-}
-</style>
+    .note {
+      font-size: 12px;
+      opacity: 0.8;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>♠ Poker – punktacja ♣</h1>
+  <div class="container">
+    <h1>♠ Poker – punktacja ♣</h1>
 
+    <table>
+      <thead>
+        <tr>
+          <th>Gracz</th>
+          <th>Punkty</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody id="players">
+        <!-- Players injected by JS -->
+      </tbody>
+    </table>
 
-<table>
-</html><!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8" />
-<title>Poker – tabela punktów</title>
-<style>
-body {
-font-family: Arial, sans-serif;
-background: #0f172a;
-color: #e5e7eb;
-display: flex;
-justify-content: center;
-align-items: center;
-min-height: 100vh;
-}
+    <button class="reset" onclick="resetScores()">🔄 Resetuj wszystkie punkty</button>
+    <p class="note">Punkty zapisują się automatycznie po każdej grze</p>
+  </div>
 
+  <script>
+    const players = ["Chudy", "dasher", "aurinek", "titiuf", "mlody"];
 
-.container {
-background: #020617;
-padding: 24px;
-border-radius: 12px;
-width: 100%;
-max-width: 700px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
+    function loadScores() {
+      return JSON.parse(localStorage.getItem("pokerScores")) || {};
+    }
 
+    function saveScores(scores) {
+      localStorage.setItem("pokerScores", JSON.stringify(scores));
+    }
 
-h1 {
-text-align: center;
-margin-bottom: 16px;
-}
+    function addPoints(name, value) {
+      const scores = loadScores();
+      scores[name] = (scores[name] || 0) + value;
+      saveScores(scores);
+      render();
+    }
 
+    function resetScores() {
+      if (confirm("Na pewno zresetować wszystkie punkty?")) {
+        localStorage.removeItem("pokerScores");
+        render();
+      }
+    }
 
-table {
-width: 100%;
-border-collapse: collapse;
-margin-bottom: 16px;
-}
+    function render() {
+      const tbody = document.getElementById("players");
+      const scores = loadScores();
+      tbody.innerHTML = "";
 
+      players.forEach(player => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${player}</td>
+          <td>${scores[player] || 0}</td>
+          <td>
+            <button onclick="addPoints('${player}', 1)">+1</button>
+            <button onclick="addPoints('${player}', 5)">+5</button>
+            <button onclick="addPoints('${player}', 10)">+10</button>
+            <button class="minus" onclick="addPoints('${player}', -1)">-1</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
 
-th, td {
-border-bottom: 1px solid #1e293b;
-padding: 10px;
-text-align: center;
-}
-
-
-th {
-background: #020617;
-}
-
-
-input[type=number] {
-width: 70px;
-padding: 6px;
-text-align: center;
-border-radius: 6px;
-border: none;
-}
-
-
-button {
-background: #22c55e;
-color: #022c22;
-border: none;
-padding: 8px 12px;
-border-radius: 8px;
-cursor: pointer;
-font-weight: bold;
-margin: 2px;
-}
-
-
-button.minus {
-background: #ef4444;
-color: #450a0a;
-}
-
-
-button.reset {
-background: #38bdf8;
-color: #082f49;
-width: 100%;
-margin-top: 8px;
-}
-
-
-.note {
-font-size: 12px;
-opacity: 0.8;
-text-align: center;
-}
-</style>
-</head>
-<body>
-<div class="container">
-<h1>♠ Poker – punktacja ♣</h1>
-
-
-<table>
+    render();
+  </script>
+</body>
 </html>
