@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Poker – tabela punktów</title>
-
-  <!-- CSS -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poker – wyniki</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
   <div class="container">
-    <h1>♠ Poker – punktacja ♣</h1>
+    <h1>♠ Poker – wyniki ♣</h1>
+
+    <div class="add-result">
+      <label>
+        Zwycięzca dnia:
+        <select id="winnerSelect"></select>
+      </label>
+      <button id="addResult">Dodaj wynik</button>
+    </div>
 
     <table>
       <thead>
         <tr>
-          <th>Gracz</th>
-          <th>Punkty</th>
-          <th>Akcje</th>
+          <th>Data</th>
+          <th>Zwycięzca</th>
         </tr>
       </thead>
-      <tbody id="players"></tbody>
+      <tbody id="results"></tbody>
     </table>
 
-    <button class="reset" id="resetBtn">🔄 Resetuj wszystkie punkty</button>
-    <p class="note">Punkty zapisują się automatycznie po każdej grze</p>
+    <button class="reset" id="reset">🔄 Wyczyść wszystkie wyniki</button>
   </div>
 
-  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>
