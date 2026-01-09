@@ -2,54 +2,220 @@ const players = ["Chudy", "dasher", "aurinek", "titiuf", "mlody"];
 
 const winnerSelect = document.getElementById("winnerSelect");
 const resultsBody = document.getElementById("results");
+const scoresBody = document.getElementById("scores");
 const addBtn = document.getElementById("addResult");
 const resetBtn = document.getElementById("reset");
 
-players.forEach(player => {
-  const option = document.createElement("option");
-  option.value = player;
-  option.textContent = player;
-  winnerSelect.appendChild(option);
+/* INIT SELECT */
+players.forEach(p => {
+  const opt = document.createElement("option");
+  opt.value = p;
+  opt.textContent = p;
+  winnerSelect.appendChild(opt);
 });
 
-function loadResults() {
-  return JSON.parse(localStorage.getItem("pokerResults")) || [];
+function loadData() {
+  return JSON.parse(localStorage.getItem("pokerData")) || {
+    history: [],
+    scores: Object.fromEntries(players.map(p => [p, 0]))
+  };
 }
 
-function saveResults(results) {
-  localStorage.setItem("pokerResults", JSON.stringify(results));
+function saveData(data) {
+  localStorage.setItem("pokerData", JSON.stringify(data));
 }
 
 function render() {
-  const results = loadResults();
-  resultsBody.innerHTML = "";
+  const data = loadData();
 
-  results.forEach(entry => {
+  /* SCORES */
+  scoresBody.innerHTML = "";
+  players.forEach(p => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${entry.date}</td>
-      <td>${entry.winner}</td>
+      <td>${p}</td>
+      <td>${data.scores[p] > 0 ? "+" : ""}${data.scores[p]}</td>
+    `;
+    scoresBody.appendChild(tr);
+  });
+
+  /* HISTORY */
+  resultsBody.innerHTML = "";
+  data.history.forEach(h => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${h.date}</td>
+      <td>${h.winner}</td>
     `;
     resultsBody.appendChild(tr);
   });
 }
 
 addBtn.addEventListener("click", () => {
-  const results = loadResults();
-  const today = new Date().toLocaleDateString("pl-PL");
+  const data = loadData();
+  const winner = winnerSelect.value;
+  const date = new Date().toLocaleDateString("pl-PL");
 
-  results.push({
-    date: today,
-    winner: winnerSelect.value
+  players.forEach(p => {
+    data.scores[p] += (p === winner ? 10 : -10);
   });
 
-  saveResults(results);
+  data.history.push({ date, winner });
+  saveData(data);
   render();
 });
 
 resetBtn.addEventListener("click", () => {
-  if (confirm("Usunąć wszystkie wyniki?")) {
-    localStorage.removeItem("pokerResults");
+  if (confirm("Na pewno usunąć WSZYSTKO?")) {
+    localStorage.removeItem("pokerData");
+    render();
+  }
+});
+
+render();const players = ["Chudy", "dasher", "aurinek", "titiuf", "mlody"];
+
+const winnerSelect = document.getElementById("winnerSelect");
+const resultsBody = document.getElementById("results");
+const scoresBody = document.getElementById("scores");
+const addBtn = document.getElementById("addResult");
+const resetBtn = document.getElementById("reset");
+
+/* INIT SELECT */
+players.forEach(p => {
+  const opt = document.createElement("option");
+  opt.value = p;
+  opt.textContent = p;
+  winnerSelect.appendChild(opt);
+});
+
+function loadData() {
+  return JSON.parse(localStorage.getItem("pokerData")) || {
+    history: [],
+    scores: Object.fromEntries(players.map(p => [p, 0]))
+  };
+}
+
+function saveData(data) {
+  localStorage.setItem("pokerData", JSON.stringify(data));
+}
+
+function render() {
+  const data = loadData();
+
+  /* SCORES */
+  scoresBody.innerHTML = "";
+  players.forEach(p => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p}</td>
+      <td>${data.scores[p] > 0 ? "+" : ""}${data.scores[p]}</td>
+    `;
+    scoresBody.appendChild(tr);
+  });
+
+  /* HISTORY */
+  resultsBody.innerHTML = "";
+  data.history.forEach(h => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${h.date}</td>
+      <td>${h.winner}</td>
+    `;
+    resultsBody.appendChild(tr);
+  });
+}
+
+addBtn.addEventListener("click", () => {
+  const data = loadData();
+  const winner = winnerSelect.value;
+  const date = new Date().toLocaleDateString("pl-PL");
+
+  players.forEach(p => {
+    data.scores[p] += (p === winner ? 10 : -10);
+  });
+
+  data.history.push({ date, winner });
+  saveData(data);
+  render();
+});
+
+resetBtn.addEventListener("click", () => {
+  if (confirm("Na pewno usunąć WSZYSTKO?")) {
+    localStorage.removeItem("pokerData");
+    render();
+  }
+});
+
+render();const players = ["Chudy", "dasher", "aurinek", "titiuf", "mlody"];
+
+const winnerSelect = document.getElementById("winnerSelect");
+const resultsBody = document.getElementById("results");
+const scoresBody = document.getElementById("scores");
+const addBtn = document.getElementById("addResult");
+const resetBtn = document.getElementById("reset");
+
+/* INIT SELECT */
+players.forEach(p => {
+  const opt = document.createElement("option");
+  opt.value = p;
+  opt.textContent = p;
+  winnerSelect.appendChild(opt);
+});
+
+function loadData() {
+  return JSON.parse(localStorage.getItem("pokerData")) || {
+    history: [],
+    scores: Object.fromEntries(players.map(p => [p, 0]))
+  };
+}
+
+function saveData(data) {
+  localStorage.setItem("pokerData", JSON.stringify(data));
+}
+
+function render() {
+  const data = loadData();
+
+  /* SCORES */
+  scoresBody.innerHTML = "";
+  players.forEach(p => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p}</td>
+      <td>${data.scores[p] > 0 ? "+" : ""}${data.scores[p]}</td>
+    `;
+    scoresBody.appendChild(tr);
+  });
+
+  /* HISTORY */
+  resultsBody.innerHTML = "";
+  data.history.forEach(h => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${h.date}</td>
+      <td>${h.winner}</td>
+    `;
+    resultsBody.appendChild(tr);
+  });
+}
+
+addBtn.addEventListener("click", () => {
+  const data = loadData();
+  const winner = winnerSelect.value;
+  const date = new Date().toLocaleDateString("pl-PL");
+
+  players.forEach(p => {
+    data.scores[p] += (p === winner ? 10 : -10);
+  });
+
+  data.history.push({ date, winner });
+  saveData(data);
+  render();
+});
+
+resetBtn.addEventListener("click", () => {
+  if (confirm("Na pewno usunąć WSZYSTKO?")) {
+    localStorage.removeItem("pokerData");
     render();
   }
 });
