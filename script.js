@@ -1,52 +1,57 @@
 const players = ["Chudy", "dasher", "aurinek", "titiuf", "mlody"];
 
-const playersBody = document.getElementById("players");
-const resetBtn = document.getElementById("resetBtn");
+const winnerSelect = document.getElementById("winnerSelect");
+const resultsBody = document.getElementById("results");
+const addBtn = document.getElementById("addResult");
+const resetBtn = document.getElementById("reset");
 
-function loadScores() {
-  return JSON.parse(localStorage.getItem("pokerScores")) || {};
+players.forEach(player => {
+  const option = document.createElement("option");
+  option.value = player;
+  option.textContent = player;
+  winnerSelect.appendChild(option);
+});
+
+function loadResults() {
+  return JSON.parse(localStorage.getItem("pokerResults")) || [];
 }
 
-function saveScores(scores) {
-  localStorage.setItem("pokerScores", JSON.stringify(scores));
-}
-
-function addPoints(name, value) {
-  const scores = loadScores();
-  scores[name] = (scores[name] || 0) + value;
-  saveScores(scores);
-  render();
-}
-
-function resetScores() {
-  if (confirm("Na pewno zresetować wszystkie punkty?")) {
-    localStorage.removeItem("pokerScores");
-    render();
-  }
+function saveResults(results) {
+  localStorage.setItem("pokerResults", JSON.stringify(results));
 }
 
 function render() {
-  const scores = loadScores();
-  playersBody.innerHTML = "";
+  const results = loadResults();
+  resultsBody.innerHTML = "";
 
-  players.forEach(player => {
+  results.forEach(entry => {
     const tr = document.createElement("tr");
-
     tr.innerHTML = `
-      <td>${player}</td>
-      <td>${scores[player] || 0}</td>
-      <td>
-        <button onclick="addPoints('${player}', 1)">+1</button>
-        <button onclick="addPoints('${player}', 5)">+5</button>
-        <button onclick="addPoints('${player}', 10)">+10</button>
-        <button class="minus" onclick="addPoints('${player}', -1)">-1</button>
-      </td>
+      <td>${entry.date}</td>
+      <td>${entry.winner}</td>
     `;
-
-    playersBody.appendChild(tr);
+    resultsBody.appendChild(tr);
   });
 }
 
-resetBtn.addEventListener("click", resetScores);
+addBtn.addEventListener("click", () => {
+  const results = loadResults();
+  const today = new Date().toLocaleDateString("pl-PL");
+
+  results.push({
+    date: today,
+    winner: winnerSelect.value
+  });
+
+  saveResults(results);
+  render();
+});
+
+resetBtn.addEventListener("click", () => {
+  if (confirm("Usunąć wszystkie wyniki?")) {
+    localStorage.removeItem("pokerResults");
+    render();
+  }
+});
 
 render();
