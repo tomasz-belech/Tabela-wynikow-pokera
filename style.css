@@ -21,38 +21,7 @@ body {
 
 h1 {
   text-align: center;
-  margin-bottom: 20px;
-}
-
-h2 {
-  margin-top: 20px;
-  margin-bottom: 8px;
-  font-size: 18px;
-  text-align: center;
-}
-
-.add-result {
-  display: flex;
-  gap: 10px;
   margin-bottom: 16px;
-}
-
-.add-result select,
-.add-result button {
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-}
-
-.add-result select {
-  flex: 1;
-}
-
-.add-result button {
-  background: #22c55e;
-  font-weight: bold;
-  cursor: pointer;
 }
 
 table {
@@ -66,13 +35,33 @@ th, td {
   text-align: center;
 }
 
-.reset {
-  margin-top: 16px;
-  width: 100%;
-  padding: 10px;
+td.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+button {
+  padding: 8px 14px;
   border-radius: 10px;
   border: none;
-  background: #ef4444;
   font-weight: bold;
   cursor: pointer;
+}
+
+button.plus {
+  background: #22c55e;
+  color: #022c22;
+}
+
+button.minus {
+  background: #ef4444;
+  color: #450a0a;
+}
+
+button.reset {
+  width: 100%;
+  margin-top: 16px;
+  background: #38bdf8;
+  color: #082f49;
 }
