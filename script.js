@@ -1,76 +1,53 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const players = ["Chudy", "dasher", "aurinek", "titiuf", "mlody"];
-
-  const winnerSelect = document.getElementById("winnerSelect");
-  const resultsBody = document.getElementById("results");
-  const scoresBody = document.getElementById("scores");
-  const addBtn = document.getElementById("addResult");
+  const tbody = document.getElementById("players");
   const resetBtn = document.getElementById("reset");
 
-  players.forEach(player => {
-    const option = document.createElement("option");
-    option.value = player;
-    option.textContent = player;
-    winnerSelect.appendChild(option);
-  });
-
-  function loadData() {
-    return JSON.parse(localStorage.getItem("pokerData")) || {
-      history: [],
-      scores: Object.fromEntries(players.map(p => [p, 0]))
-    };
+  function loadScores() {
+    return JSON.parse(localStorage.getItem("pokerScores")) || {};
   }
 
-  function saveData(data) {
-    localStorage.setItem("pokerData", JSON.stringify(data));
+  function saveScores(scores) {
+    localStorage.setItem("pokerScores", JSON.stringify(scores));
+  }
+
+  function changeScore(player, value) {
+    const scores = loadScores();
+    scores[player] = (scores[player] || 0) + value;
+    saveScores(scores);
+    render();
   }
 
   function render() {
-    const data = loadData();
+    const scores = loadScores();
+    tbody.innerHTML = "";
 
-    scoresBody.innerHTML = "";
-    players.forEach(p => {
+    players.forEach(player => {
       const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${p}</td>
-        <td>${data.scores[p] >= 0 ? "+" : ""}${data.scores[p]}</td>
-      `;
-      scoresBody.appendChild(tr);
-    });
 
-    resultsBody.innerHTML = "";
-    data.history.forEach(h => {
-      const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${h.date}</td>
-        <td>${h.winner}</td>
+        <td>${player}</td>
+        <td>${scores[player] || 0}</td>
+        <td class="actions">
+          <button class="plus">+10</button>
+          <button class="minus">-10</button>
+        </td>
       `;
-      resultsBody.appendChild(tr);
+
+      tr.querySelector(".plus").onclick = () => changeScore(player, 10);
+      tr.querySelector(".minus").onclick = () => changeScore(player, -10);
+
+      tbody.appendChild(tr);
     });
   }
 
-  addBtn.addEventListener("click", () => {
-    const data = loadData();
-    const winner = winnerSelect.value;
-    const date = new Date().toLocaleDateString("pl-PL");
-
-    players.forEach(p => {
-      data.scores[p] += (p === winner ? 10 : -10);
-    });
-
-    data.history.push({ date, winner });
-    saveData(data);
-    render();
-  });
-
   resetBtn.addEventListener("click", () => {
-    if (confirm("Na pewno usunąć wszystkie dane?")) {
-      localStorage.removeItem("pokerData");
+    if (confirm("Zresetować wszystkie punkty?")) {
+      localStorage.removeItem("pokerScores");
       render();
     }
   });
 
   render();
 });
-
