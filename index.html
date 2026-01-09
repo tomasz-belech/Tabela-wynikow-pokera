@@ -3,45 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Poker – wyniki</title>
+  <title>Poker – tabela punktów</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="container">
-    <h1>♠ Poker – wyniki ♣</h1>
+    <h1>♠ Poker – punktacja ♣</h1>
 
-    <div class="add-result">
-      <select id="winnerSelect"></select>
-      <button id="addResult">Dodaj zwycięzcę dnia</button>
-    </div>
-
-    <h2>📊 Aktualne punkty</h2>
     <table>
       <thead>
         <tr>
           <th>Gracz</th>
           <th>Punkty</th>
+          <th>Akcje</th>
         </tr>
       </thead>
-      <tbody id="scores"></tbody>
+      <tbody id="players"></tbody>
     </table>
 
-    <h2>📅 Historia gier</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Zwycięzca</th>
-        </tr>
-      </thead>
-      <tbody id="results"></tbody>
-    </table>
-
-    <button class="reset" id="reset">🔄 Wyczyść wszystko</button>
+    <button class="reset" id="reset">🔄 Resetuj wszystkie punkty</button>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
